@@ -44,17 +44,13 @@ const loadData = () => __awaiter(void 0, void 0, void 0, function* () {
             author: post.author,
         };
     }));
-    const filteredResults = filterResults(results, document.querySelector("#search").value);
+    const searchInput = document.querySelector("#search");
+    const filteredResults = filterResults(results, searchInput ? searchInput.value : "");
     const articlesList = document.querySelector("#articles-list");
-    articlesList.innerHTML = filteredResults.map((result) => {
-        return `
-      <li class="article">
-        <h2>${result.title}</h2>
-        <div class="metadata">
-          <span class="author">${result.author}</span>
-        </div>
-      </li>
-    `;
-    }).join("");
+    if (articlesList) {
+        articlesList.innerHTML = filteredResults.map((result) => {
+            // ... reste du code
+        }).join("");
+    }
 });
 window.addEventListener("load", loadData);
