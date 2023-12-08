@@ -35,15 +35,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 var usersUrl = "https://jsonplaceholder.typicode.com/users";
 var postsUrl = "https://jsonplaceholder.typicode.com/posts";
 var getUsers = function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -80,11 +71,11 @@ var filterResults = function (results, searchTerm) {
     }
     var regex = new RegExp(searchTerm, "i");
     return results.filter(function (result) {
-        return regex.test(result.title) || regex.test(result.author);
+        return regex.test(result.name) || regex.test(result.articles.map(function (a) { return a.title; }).join(" "));
     });
 };
 var loadData = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var users, posts, results, searchInput, filteredResults, articlesList;
+    var users, posts, userPostsMap, results, searchInput, filteredResults, articlesList;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4, getUsers()];
@@ -93,30 +84,36 @@ var loadData = function () { return __awaiter(void 0, void 0, void 0, function (
                 return [4, getPosts()];
             case 2:
                 posts = _a.sent();
-                console.log(users);
-                console.log(posts);
-                results = __spreadArray(__spreadArray([], users.map(function (user) {
-                    return {
-                        title: user.name,
-                        author: user.username,
-                    };
-                }), true), posts.map(function (post) {
-                    return {
+                userPostsMap = {};
+                posts.forEach(function (post) {
+                    if (!userPostsMap[post.userId]) {
+                        userPostsMap[post.userId] = [];
+                    }
+                    userPostsMap[post.userId].push({
                         title: post.title,
-                        author: post.body,
-                    };
-                }), true);
+                        body: post.body,
+                        userId: post.userId,
+                    });
+                });
+                results = users.map(function (user) { return ({
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    articles: userPostsMap[user.id] || [],
+                }); });
                 searchInput = document.querySelector("#search");
                 filteredResults = filterResults(results, searchInput ? searchInput.value : "");
                 articlesList = document.querySelector("#articles-list");
                 if (articlesList) {
                     articlesList.innerHTML = filteredResults.map(function (result) {
-                        return "\n        <li class=\"article\">\n          <h2>".concat(result.title, "</h2>\n          <div class=\"metadata\">\n            <span class=\"author\">").concat(result.author, "</span>\n          </div>\n        </li>\n      ");
+                        var articlesHTML = "\n      <li class=\"article\">\n        <h2>".concat(result.name, "</h2>\n        <h4>").concat(result.email, "</h4>\n        <div class=\"metadata\">\n          ").concat(result.articles.map(function (article) { return "<span class=\"author\">".concat(article.title, "</span>"); }).join(""), "\n        </div>\n      </li>\n      ");
+                        return articlesHTML;
                     }).join("");
                 }
+                console.log(results);
                 return [2];
         }
     });
 }); };
-console.log('bite');
 window.addEventListener("load", loadData);
+loadData();
