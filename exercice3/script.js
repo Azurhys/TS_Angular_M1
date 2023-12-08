@@ -32,16 +32,17 @@ const filterResults = (results, searchTerm) => {
 const loadData = () => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield getUsers();
     const posts = yield getPosts();
+    // Ajustez cette partie pour correspondre à la structure réelle de vos données
     const results = users.map((user) => {
         return {
-            title: user.name,
-            author: user.username,
+            title: user.title, // Modifiez ici si nécessaire
+            author: user.body, // Modifiez ici si nécessaire
         };
     });
     results.push(...posts.map((post) => {
         return {
             title: post.title,
-            author: post.author,
+            author: post.body,
         };
     }));
     const searchInput = document.querySelector("#search");
@@ -49,7 +50,14 @@ const loadData = () => __awaiter(void 0, void 0, void 0, function* () {
     const articlesList = document.querySelector("#articles-list");
     if (articlesList) {
         articlesList.innerHTML = filteredResults.map((result) => {
-            // ... reste du code
+            return `
+          <li class="article">
+            <h2>${result.title}</h2>
+            <div class="metadata">
+              <span class="author">${result.author}</span>
+            </div>
+          </li>
+        `;
         }).join("");
     }
 });
