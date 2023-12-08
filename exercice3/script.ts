@@ -28,33 +28,30 @@ const loadData = async () => {
   const users = await getUsers();
   const posts = await getPosts();
 
-  const results = users.map((user) => {
+  const results = users.map((user: any) => {
     return {
       title: user.name,
       author: user.username,
     };
   });
 
-  results.push(...posts.map((post) => {
+  results.push(...posts.map((post: any) => {
     return {
       title: post.title,
       author: post.author,
     };
   }));
 
-  const filteredResults = filterResults(results, document.querySelector("#search").value);
+  const searchInput = document.querySelector("#search") as HTMLInputElement;
+  const filteredResults = filterResults(results, searchInput ? searchInput.value : "");
+  
 
   const articlesList = document.querySelector("#articles-list");
-  articlesList.innerHTML = filteredResults.map((result) => {
-    return `
-      <li class="article">
-        <h2>${result.title}</h2>
-        <div class="metadata">
-          <span class="author">${result.author}</span>
-        </div>
-      </li>
-    `;
-  }).join("");
+    if (articlesList) {
+    articlesList.innerHTML = filteredResults.map((result: any) => {
+        // ... reste du code
+    }).join("");
+    }
 };
 
 window.addEventListener("load", loadData);
