@@ -3,56 +3,60 @@ import { XMLHttpRequest } from "fetch";
 const usersUrl = "https://jsonplaceholder.typicode.com/users";
 const postsUrl = "https://jsonplaceholder.typicode.com/posts";
 
-const container = document.querySelector(".container");
-const articlesList = document.querySelector("#articles-list");
+const getUsers = async () => {
+  const response = await fetch(usersUrl);
+  const data = await response.json();
+  return data;
+};
+
+const getPosts = async () => {
+  const response = await fetch(postsUrl);
+  const data = await response.json();
+  return data;
+};
+
+const filterResults = (results, searchTerm) => {
+  if (!searchTerm) {
+    return results;
+  }
+
+  const regex = new RegExp(searchTerm, "i");
+  return results.filter((result) => {
+    return regex.test(result.title) || regex.test(result.author);
+  });
+};
 
 const loadData = async () => {
-  const usersResponse = await fetch(usersUrl);
-  const users = await usersResponse.json();
+  const users = await getUsers();
+  const posts = await getPosts();
 
-  const postsResponse = await fetch(postsUrl);
-  const posts = await postsResponse.json();
-
-  const data = [...users, ...posts];
-
-  articlesList.innerHTML = data.map((item) => {
-    return `
-      <li class="article">
-        <h2>${item.title}</h2>
-        <div class="metadata">
-          <span class="author">${item.author}</span>
-          <span class="date">${item.date}</span>
-        </div>
-      </li>
-    `;
-  }).join("");
-};
-
-loadData();
-
-const filterData = () => {
-  const searchTerm = document.querySelector("#search").value;
-  const authorTerm = document.querySelector("#author").value;
-
-  const filteredData = data.filter((item) => {
-    return (
-      searchTerm && item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      authorTerm && item.author.toLowerCase().includes(authorTerm.toLowerCase())
-    );
+  const results = users.map((user) => {
+    return {
+      title: user.name,
+      author: user.username,
+    };
   });
 
-  articlesList.innerHTML = filteredData.map((item) => {
+  results.push(...posts.map((post) => {
+    return {
+      title: post.title,
+      author: post.author,
+    };
+  }));
+
+  const filteredResults = filterResults(results, document.querySelector("#search").value);
+
+  const articlesList = document.querySelector("#articles-list");
+  articlesList.innerHTML = filteredResults.map((result) => {
     return `
       <li class="article">
-        <h2>${item.title}</h2>
+        <h2>${result.title}</h2>
         <div class="metadata">
-          <span class="author">${item.author}</span>
-          <span class="date">${item.date}</span>
+          <span class="author">${result.author}</span>
         </div>
       </li>
     `;
   }).join("");
 };
 
-document.querySelector("#search").addEventListener("input", filterData);
-document.querySelector("#author").addEventListener("input", filterData);
+window.addEventListener("load", loadData);
