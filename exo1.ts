@@ -1,7 +1,7 @@
 export type User = {
     name: string;
     age: number;
-    occupation?: string;
+    occupation: string;
     competences?: string[];
     adresse?: {
       rue: string;
