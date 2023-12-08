@@ -8,3 +8,5 @@ interface Administrateur {
    }
 
    type UtilisateurAnonyme = Omit<Administrateur, 'email' | 'dt_connexion' | 'login' | 'password'> & { nom?: string } & { ip: string };
+
+   // fix 
