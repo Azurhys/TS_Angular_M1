@@ -25,41 +25,44 @@ const filterResults = (results: any[], searchTerm: string) => {
 };
 
 const loadData = async () => {
-    const users = await getUsers();
-    const posts = await getPosts();
-        
-    // Ajustez cette partie pour correspondre à la structure réelle de vos données
-    const results = users.map((user: any) => {
-      return {
-        title: user.title, // Modifiez ici si nécessaire
-        author: user.body,  // Modifiez ici si nécessaire
-      };
-    });
+  const users = await getUsers();
+  const posts = await getPosts();
+  console.log(users);
+  console.log(posts);
+
   
-    results.push(...posts.map((post: any) => {
+  const results = [
+    ...users.map((user: any) => {
+      return {
+        title: user.name, // Modifiez ici si nécessaire
+        author: user.username, 
+      };
+    }),
+    ...posts.map((post: any) => {
       return {
         title: post.title,
         author: post.body,
       };
-    }));
-  
-    const searchInput = document.querySelector("#search") as HTMLInputElement;
-    const filteredResults = filterResults(results, searchInput ? searchInput.value : "");
-  
-    const articlesList = document.querySelector("#articles-list");
-    if (articlesList) {
-      articlesList.innerHTML = filteredResults.map((result: any) => {
-        return `
-          <li class="article">
-            <h2>${result.title}</h2>
-            <div class="metadata">
-              <span class="author">${result.author}</span>
-            </div>
-          </li>
-        `;
-      }).join("");
-    }
-  };
-  
-  window.addEventListener("load", loadData);
-  
+    }),
+  ];
+ 
+  const searchInput = document.querySelector("#search") as HTMLInputElement;
+  const filteredResults = filterResults(results, searchInput ? searchInput.value : "");
+
+  const articlesList = document.querySelector("#articles-list");
+  if (articlesList) {
+    articlesList.innerHTML = filteredResults.map((result: any) => {
+      return `
+        <li class="article">
+          <h2>${result.title}</h2>
+          <div class="metadata">
+            <span class="author">${result.author}</span>
+          </div>
+        </li>
+      `;
+    }).join("");
+  }
+};
+console.log('bite')
+
+window.addEventListener("load", loadData);
