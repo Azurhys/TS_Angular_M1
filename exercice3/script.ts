@@ -1,5 +1,3 @@
-import { XMLHttpRequest } from "fetch";
-
 const usersUrl = "https://jsonplaceholder.typicode.com/users";
 const postsUrl = "https://jsonplaceholder.typicode.com/posts";
 
@@ -15,7 +13,7 @@ const getPosts = async () => {
   return data;
 };
 
-const filterResults = (results, searchTerm) => {
+const filterResults = (results: any[], searchTerm: string) => {
   if (!searchTerm) {
     return results;
   }
