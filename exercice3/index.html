@@ -3,57 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Liste d'articles</title>
-  <style>
-    /* Style pour la barre de filtres */
-    .filters {
-      width: 25%;
-      float: left;
-      margin-right: 1rem;
-      border: 1px solid #ccc;
-      padding: 1rem;
-    }
-
-    .filters h2 {
-      margin-bottom: 0;
-    }
-
-    .filters .form-group {
-      margin-bottom: 1rem;
-    }
-
-    .filters .form-control {
-      width: 100%;
-    }
-
-    /* Style pour la liste des articles */
-    .articles {
-      width: 75%;
-      float: left;
-      border: 1px solid #ccc;
-      padding: 1rem;
-    }
-
-    .articles .article {
-      margin-bottom: 1rem;
-    }
-
-    .articles .article h2 {
-      margin-bottom: 0;
-    }
-
-    .articles .article .metadata {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .articles .article .metadata .author {
-      font-size: 0.8rem;
-    }
-
-    .articles .article .metadata .date {
-      font-size: 0.8rem;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
@@ -76,7 +26,6 @@
       <ul id="articles-list"></ul>
     </div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
