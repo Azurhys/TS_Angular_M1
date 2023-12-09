@@ -65,17 +65,20 @@ var getPosts = function () { return __awaiter(void 0, void 0, void 0, function (
         }
     });
 }); };
-var filterResults = function (results, searchTerm) {
-    if (!searchTerm) {
+var filterResults = function (results, searchTerm, authorTerm) {
+    if (!searchTerm && !authorTerm) {
         return results;
     }
-    var regex = new RegExp(searchTerm, "i");
+    var regexTitle = new RegExp(searchTerm, "i");
+    var regexAuthor = new RegExp(authorTerm, "i");
     return results.filter(function (result) {
-        return regex.test(result.name) || regex.test(result.articles.map(function (a) { return a.title; }).join(" "));
+        var titleMatch = !searchTerm || result.articles.some(function (a) { return regexTitle.test(a.title); });
+        var authorMatch = !authorTerm || regexAuthor.test(result.name);
+        return (searchTerm ? titleMatch : true) && (authorTerm ? authorMatch : true);
     });
 };
 var loadData = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var users, posts, userPostsMap, results, searchInput, filteredResults, articlesList;
+    var users, posts, userPostsMap, results, searchInput, authorInput, filteredResults, articlesList;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4, getUsers()];
@@ -102,7 +105,8 @@ var loadData = function () { return __awaiter(void 0, void 0, void 0, function (
                     articles: userPostsMap[user.id] || [],
                 }); });
                 searchInput = document.querySelector("#search");
-                filteredResults = filterResults(results, searchInput ? searchInput.value : "");
+                authorInput = document.querySelector("#author");
+                filteredResults = filterResults(results, searchInput ? searchInput.value : "", authorInput ? authorInput.value : "");
                 articlesList = document.querySelector("#articles-list");
                 if (articlesList) {
                     articlesList.innerHTML = filteredResults.map(function (result) {
@@ -117,3 +121,16 @@ var loadData = function () { return __awaiter(void 0, void 0, void 0, function (
 }); };
 window.addEventListener("load", loadData);
 loadData();
+var searchForm = document.querySelector("form");
+var searchButton = document.querySelector("button");
+if (searchButton) {
+    searchButton.addEventListener("click", function () {
+        loadData();
+    });
+}
+if (searchForm) {
+    searchForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        loadData();
+    });
+}

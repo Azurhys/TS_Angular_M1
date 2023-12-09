@@ -29,16 +29,31 @@ const getPosts = async (): Promise<Post[]> => {
   return data;
 };
 
-const filterResults = (results: UserWithArticles[], searchTerm: string) => {
-  if (!searchTerm) {
+const filterResults = (
+  results: UserWithArticles[],
+  searchTerm: string,
+  authorTerm: string
+) => {
+  if (!searchTerm && !authorTerm) {
     return results;
   }
 
-  const regex = new RegExp(searchTerm, "i");
+  const regexTitle = new RegExp(searchTerm, "i");
+  const regexAuthor = new RegExp(authorTerm, "i");
+
   return results.filter((result) => {
-    return regex.test(result.name) || regex.test(result.articles.map(a => a.title).join(" "));
+    const titleMatch =
+      !searchTerm || result.articles.some((a) => regexTitle.test(a.title));
+
+    const authorMatch =
+      !authorTerm || regexAuthor.test(result.name);
+
+    return (searchTerm ? titleMatch : true) && (authorTerm ? authorMatch : true);
   });
 };
+
+
+
 
 const loadData = async () => {
   const users = await getUsers();
@@ -66,7 +81,8 @@ const loadData = async () => {
   }));
 
   const searchInput = document.querySelector("#search") as HTMLInputElement;
-  const filteredResults = filterResults(results, searchInput ? searchInput.value : "");
+  const authorInput = document.querySelector("#author") as HTMLInputElement;
+  const filteredResults = filterResults(results, searchInput ? searchInput.value : "", authorInput ? authorInput.value : "");
 
   const articlesList = document.querySelector("#articles-list");
   if (articlesList) {
@@ -88,3 +104,19 @@ const loadData = async () => {
 
 window.addEventListener("load", loadData);
 loadData();
+
+const searchForm = document.querySelector("form");
+const searchButton = document.querySelector("button");
+
+if (searchButton) {
+  searchButton.addEventListener("click", () => {
+    loadData();
+  });
+}
+
+if (searchForm) {
+  searchForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    loadData();
+  });
+}
