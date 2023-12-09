@@ -35,6 +35,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var style = {
+    href: "style.css",
+};
 var usersUrl = "https://jsonplaceholder.typicode.com/users";
 var postsUrl = "https://jsonplaceholder.typicode.com/posts";
 var getUsers = function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -110,7 +113,7 @@ var loadData = function () { return __awaiter(void 0, void 0, void 0, function (
                 articlesList = document.querySelector("#articles-list");
                 if (articlesList) {
                     articlesList.innerHTML = filteredResults.map(function (result) {
-                        var articlesHTML = "\n      <li class=\"article\">\n        <h2>".concat(result.name, "</h2>\n        <h4>").concat(result.email, "</h4>\n        <div class=\"metadata\">\n          ").concat(result.articles.map(function (article) { return "<span class=\"author\">".concat(article.title, "</span>"); }).join(""), "\n        </div>\n      </li>\n      ");
+                        var articlesHTML = "\n      <div class=\"card p-3 mb-3 col-3 mx-3\">\n        <h2 class=\"text-primary\">".concat(result.name, "</h2>\n        <h4 class=\"text-warning\">").concat(result.email, "</h4>\n        <ul class=\"list-group list-group-flush\"\">\n          ").concat(result.articles.map(function (article) { return "<li class=\"list-group-item\">".concat(article.title, "</li>"); }).join(""), "\n        </ul>\n      </div>\n      ");
                         return articlesHTML;
                     }).join("");
                 }

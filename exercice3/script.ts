@@ -92,13 +92,13 @@ const loadData = async () => {
   if (articlesList) {
     articlesList.innerHTML = filteredResults.map((result) => {
       const articlesHTML = `
-      <li class="article">
-        <h2>${result.name}</h2>
-        <h4>${result.email}</h4>
-        <div class="metadata">
-          ${result.articles.map((article) => `<span class="author">${article.title}</span>`).join("")}
-        </div>
-      </li>
+      <div class="card p-3 mb-3 col-3 mx-3">
+        <h2 class="text-primary">${result.name}</h2>
+        <h4 class="text-warning">${result.email}</h4>
+        <ul class="list-group list-group-flush"">
+          ${result.articles.map((article) => `<li class="list-group-item">${article.title}</li>`).join("")}
+        </ul>
+      </div>
       `;
       return articlesHTML;
     }).join("");

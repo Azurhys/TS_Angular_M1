@@ -10,21 +10,22 @@
   <div class="container">
     <div class="filters">
       <h2>Filtres</h2>
-      <form action="#" onsubmit="return false;">
-        <div class="form-group">
+      <form action="#" onsubmit="return false;" class="row">
+        <div class="form-group col-5">
           <label for="search">Recherche par titre</label>
           <input type="text" class="form-control" id="search">
         </div>
-        <div class="form-group">
+        <div class="form-group col-5">
           <label for="author">Recherche par auteur</label>
           <input type="text" class="form-control" id="author">
         </div>
-        <button type="submit">Rechercher</button>
+        <button type="submit" class="col-1 btn btn-success m-4">Rechercher</button>
       </form>
     </div>
-    <div class="articles">
-      <h2>Articles</h2>
-      <ul id="articles-list"></ul>
+      <div >
+        <h2>Articles</h2>
+        <div id="articles-list" class="row justify-content-between"></div>
+      </div>
     </div>
   </div>
   <script src="script.js"></script>
