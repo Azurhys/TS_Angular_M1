@@ -1,3 +1,7 @@
+const style = {
+  href: "style.css",
+};
+
 const usersUrl = "https://jsonplaceholder.typicode.com/users";
 const postsUrl = "https://jsonplaceholder.typicode.com/posts";
 
